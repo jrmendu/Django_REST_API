@@ -6,10 +6,8 @@ from snippets.serializers import SnippetSerializer
 
 
 @api_view(['GET', 'POST'])
-def snippet_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
+def snippet_list(request, format=None):
+    "Lista todos los snipets o crea uno de nuevo"
     if request.method == 'GET':
         snippets = Snippet.objects.all()
         serializer = SnippetSerializer(snippets, many=True)
@@ -21,13 +19,12 @@ def snippet_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
-    
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
-def snippet_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
+def snippet_detail(request, pk, format=None):
+    "Recoge, actualiza o borra un code snippet"
+    
     try:
         snippet = Snippet.objects.get(pk=pk)
     except Snippet.DoesNotExist:
